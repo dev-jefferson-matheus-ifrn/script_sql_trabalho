@@ -11,10 +11,14 @@ COLLATE utf8mb4_unicode_ci;
 
 USE clinica;
 
-DROP TABLE IF EXISTS tb_especialidades;
+
+DROP TABLE IF EXISTS tb_agendamentos;
+DROP TABLE IF EXISTS tb_horarios;
 DROP TABLE IF EXISTS tb_telefones_paciente;
-DROP TABLE IF EXISTS tb_enderecos_paciente;
+DROP TABLE IF EXISTS tb_medicos;
 DROP TABLE IF EXISTS tb_pacientes;
+DROP TABLE IF EXISTS tb_enderecos_paciente;
+DROP TABLE IF EXISTS tb_especialidades;
 
 CREATE TABLE tb_especialidades( 
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -62,3 +66,51 @@ CREATE TABLE tb_telefones_paciente(
 )ENGINE=Innodb
 CHARACTER SET utf8mb4
 COLLATE utf8mb4_unicode_ci;
+
+CREATE TABLE tb_medicos(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    curriculo VARCHAR(255) NOT NULL,
+
+    id_especialidade INT,
+
+    CONSTRAINT fk_especialidade FOREIGN KEY (id_especialidade)
+        REFERENCES tb_especialidades(id)
+    
+)ENGINE=Innodb
+CHARACTER SET utf8mb4
+COLLATE utf8mb4_unicode_ci;
+
+CREATE TABLE tb_horarios(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    data_atendimento DATE NOT NULL,
+    horario_atendimento TIME NOT NULL,
+    status_atendimento VARCHAR(12) NOT NULL,
+
+    id_medico INT,
+
+    CONSTRAINT fk_medico FOREIGN KEY (id_medico)
+        REFERENCES tb_medicos(id)
+)ENGINE=Innodb
+CHARACTER SET utf8mb4
+COLLATE utf8mb4_unicode_ci;
+
+CREATE TABLE tb_agendamentos(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+
+    id_paciente INT,
+
+    id_horario INT,
+
+    status_agendamento VARCHAR(20),
+
+        CONSTRAINT fk_paciente FOREIGN KEY (id_paciente)
+        REFERENCES tb_pacientes(id),
+
+        CONSTRAINT fk_horario FOREIGN KEY (id_horario)
+        REFERENCES tb_horarios(id)
+
+)ENGINE=Innodb
+CHARACTER SET utf8mb4
+COLLATE utf8mb4_unicode_ci;
+
